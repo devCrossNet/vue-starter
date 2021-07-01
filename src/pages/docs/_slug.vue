@@ -12,7 +12,7 @@
               <nuxt-link
                 v-for="page in category.pagesCollection.items"
                 :key="page.slug"
-                :to="page.slug.includes('/docs/') ? page.slug : `/docs${page.slug}`"
+                :to="page.slug.includes(`${routePrefix}/`) ? page.slug : `/docs${page.slug}`"
                 :class="$style.link"
                 :active-class="$style.active"
                 exact
@@ -61,6 +61,7 @@ export default defineComponent({
   components: { VueText, VueStack, VueColumn, VueColumns, VueContentTypeRichText, VueBox },
   setup() {
     const { app, route } = useContext();
+    const routePrefix = computed(() => '/docs');
     const slug = computed(() => (route.value.params.slug ? `/${route.value.params.slug}` : '/'));
     const { loading, result } = useQuery<GetDocsPageDataQuery, GetDocsPageDataQueryVariables>(
       GetDocsPageData,
@@ -112,6 +113,7 @@ export default defineComponent({
       loading,
       contentItems,
       categories,
+      routePrefix,
     };
   },
   head: {},

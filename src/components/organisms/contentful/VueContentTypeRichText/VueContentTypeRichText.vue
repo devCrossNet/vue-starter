@@ -19,11 +19,12 @@ export default defineComponent({
   name: 'VueContentTypeRichText',
   components: { RichTextRenderer, VueContentBlock, VueText, VueImage },
   props: {
+    routePrefix: { type: String, default: '/docs' },
     fullWidth: { type: Boolean, default: false },
     text: { type: Object as () => Maybe<ContentTypeRichTextText>, default: null },
     image: { type: Object as () => Maybe<Asset>, default: null },
   },
-  setup() {
+  setup(props) {
     return {
       renderNodes() {
         const renderHeadline = (node: any, key: string, h: any, next: any, level = 1) => {
@@ -61,7 +62,7 @@ export default defineComponent({
           [INLINES.HYPERLINK]: (node: any, key: string, h: any, next: any) => {
             const href = node.data.uri;
             const isExternal = href.includes('://');
-            const includesRoot = href.includes('/docs/');
+            const includesRoot = href.includes(`${props.routePrefix}/`);
 
             if (isExternal) {
               return h('a', { attrs: { href, target: '_blank' } }, next(node.content, key, h, next));
